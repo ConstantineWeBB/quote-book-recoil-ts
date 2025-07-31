@@ -4,7 +4,7 @@ import { FaSpinner } from 'react-icons/fa';
 import { addQuote } from '../../redux/slices/quotesSlice';
 import { setError } from '../../redux/slices/errorSlice';
 import createQuoteWithID from '../../utils/createQuoteWithID';
-import { useQuoteQuery } from '../../hooks/useQuoteQuery'; // ⬅️ кастомный хук
+import { useQuoteQuery } from '../../hooks/useQuoteQuery.ts'; // ⬅️ кастомный хук
 import styles from './QuoteForm.module.scss';
 
 function QuoteForm() {
