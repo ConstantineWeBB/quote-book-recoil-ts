@@ -1,0 +1,37 @@
+.block-quotes-filter {
+  display: flex;
+   justify-content: space-between;
+   align-items: center;
+  input[type='text'] {
+    width: 80%;
+    border-radius: 5px;
+    border: none;
+    padding: 8px;
+    &:placeholder-shown{
+      text-overflow: ellipsis;
+    }
+  }
+  input[type='checkbox'] {
+    margin: 5px;
+  }
+}
+
+.filter-group {
+    flex: 1;
+}
+
+@media (max-width:1024px) {
+  .block-quotes-filter {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .filter-group {
+    width: 70%;
+  }
+}
+
+@media (max-width: 576px) { 
+  .filter-group {
+    width: 100%;
+  }
+ }

@@ -1,0 +1,44 @@
+.block-form {
+  width: 100%;
+  padding: 50px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  h2 {
+    padding-bottom: 10px;
+  }
+  input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+  }
+  textarea {
+    padding: 10px;
+    height: 100px;
+    resize: none;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+  }
+}
+
+.button-form {
+  padding-right: 30px !important;
+}
+
+@media (max-width:1024px) {
+  form {
+    width: 50%;
+    margin: 0 auto;
+
+  }
+}
+
+@media (max-width:576px) { 
+    form {
+    width: 100%;
+  }
+ }

@@ -1,0 +1,81 @@
+.block-quotes-list {
+  h2 {
+    padding: 10px;
+  }
+  ul {
+    margin: 20px -20px;
+    list-style: none;
+  }
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid brown;
+    background-color: #fff;
+    &:nth-child(even) {
+      background-color: #ff68042a;
+    }
+    &:hover {
+      background-color: #81363662;
+    }
+  }
+}
+
+.quote-info {
+  flex: 1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.favorite-icon {
+  margin: 0 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: brown;
+  transition: all 0.3s ease 0s;
+
+}
+
+.quote-actions {
+    display: flex;
+  align-items: center;
+  .quote-actions__buttons {
+    padding: 5px;
+    color: red;
+    border: 1px solid red;
+    background-color: #fff;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    padding: 8px 12px;
+    &:hover {
+      background-color: rgba(255, 0, 0, 0.15);
+    }
+  }
+
+}
+
+.highLight {
+  background-color: yellow;
+}
+
+.quote-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+  
+  @media (min-width: 768px) {
+    -webkit-line-clamp: 3;
+  }
+}
+
+.author-source {
+  font-size: 1.1em;
+}
+

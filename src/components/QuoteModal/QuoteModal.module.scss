@@ -1,0 +1,61 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  z-index: 1000;
+}
+
+.overlayAfterOpen {
+  opacity: 1;
+}
+
+.overlayBeforeClose {
+  opacity: 0;
+}
+
+.modal {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%) !important;
+  background-color: rgb(245, 245, 220);
+  padding: 20px;
+  border-radius: 8px;
+  outline: none;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  width: 80%;
+  height: 50vh;
+  overflow-y: auto;
+  font-size: 21px;
+}
+
+.modalAfterOpen {
+  opacity: 1;
+}
+
+.modalBeforeClose {
+  opacity: 0;
+}
+
+
+.button-modal {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+h3 {
+  padding-bottom: 10px;
+}
+
+blockquote {
+  padding-bottom: 20px;
+}
