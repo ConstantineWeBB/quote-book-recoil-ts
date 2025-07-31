@@ -1,16 +1,37 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
-import { fetchQuote, addQuote, selectIsLoadingViaAPI } from '../../redux/slices/quotesSlice';
+import { addQuote } from '../../redux/slices/quotesSlice';
 import { setError } from '../../redux/slices/errorSlice';
 import createQuoteWithID from '../../utils/createQuoteWithID';
+import { useQuoteQuery } from '../../hooks/useQuoteQuery'; // ⬅️ кастомный хук
 import styles from './QuoteForm.module.scss';
 
 function QuoteForm() {
   const [author, setAuthor] = useState('');
   const [quote, setQuote] = useState('');
   const dispatch = useDispatch();
-  const isLoadingViaAPI = useSelector(selectIsLoadingViaAPI)
+
+  const {
+    data: randomQuote,
+    isFetching,
+    error,
+    refetch,
+  } = useQuoteQuery('https://dummyjson.com/quotes/random');
+
+  // Когда получена цитата — добавляем в Redux quotes
+  useEffect(() => {
+    if (randomQuote) {
+      dispatch(addQuote(randomQuote));
+    }
+  }, [randomQuote, dispatch]);
+
+  // Обработка ошибок
+  useEffect(() => {
+    if (error) {
+      dispatch(setError(error.message));
+    }
+  }, [error, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,9 +45,8 @@ function QuoteForm() {
   };
 
   const handleAddRandomQuote = () => {
-    dispatch(fetchQuote('https://dummyjson.com/quotes/random'));
-  }
-  
+    refetch(); // ⬅️ запускаем Tanstack-запрос вручную
+  };
 
   return (
     <div className={`${['app-block']} ${styles['block-form']}`}>
@@ -55,16 +75,16 @@ function QuoteForm() {
           <button
             className={`${['buttons']} ${styles['button-form']}`}
             type="button"
-            disabled={isLoadingViaAPI}
+            disabled={isFetching}
             onClick={handleAddRandomQuote}
           >
             Get a random
-            {isLoadingViaAPI && (
+            {isFetching && (
               <span
                 style={{
                   paddingLeft: '5px',
                   position: 'absolute',
-                  fontSize:'18px'
+                  fontSize: '18px',
                 }}
               >
                 <FaSpinner />
