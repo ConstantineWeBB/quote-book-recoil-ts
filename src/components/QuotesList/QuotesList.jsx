@@ -1,72 +1,31 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useRecoilState } from 'recoil';
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { MdOutlineDeleteSweep } from 'react-icons/md';
-import {
-  selectQuotes,
-  delQuote,
-  toggleFavoriteQuote,
-  clearAllQuotes,
-} from '../../redux/slices/quotesSlice';
-import {
-  selectOnlyFavoriteToggle,
-  selectAuthorFilter,
-  selectQuoteFilter,
-} from '../../redux/slices/filterSlice';
+
+import { quotesState } from '../../recoil/quotesAtom.ts';
 import QuoteModal from '../QuoteModal/QuoteModal';
 import styles from './QuotesList.module.scss';
 
 function QuoteList() {
-  const quotes = useSelector(selectQuotes);
-  const authorFilter = useSelector(selectAuthorFilter);
-  const quoteFilter = useSelector(selectQuoteFilter);
-  const onlyFavoriteFilter = useSelector(selectOnlyFavoriteToggle);
-  const dispatch = useDispatch();
-
+  const [quotes, setQuotes] = useRecoilState(quotesState);
   const [selectedQuote, setSelectedQuote] = useState(null);
 
-  
-
   const handleDeleteQuote = (id) => {
-    dispatch(delQuote(id));
+    setQuotes((prev) => prev.filter((q) => q.id !== id));
   };
 
   const handleToggleQuote = (id) => {
-    dispatch(toggleFavoriteQuote(id));
+    setQuotes((prev) =>
+      prev.map((q) => (q.id === id ? { ...q, isFavorite: !q.isFavorite } : q))
+    );
   };
 
   const handleClearAllQuotes = () => {
-    dispatch(clearAllQuotes());
+    setQuotes([]);
   };
 
-  const filtredQuotes = quotes.filter((quote) => {
-    const matchesAuthor = quote.author
-      .toLowerCase()
-      .includes(authorFilter.toLowerCase());
-
-    const matchesQuote = quote.quote
-      .toLowerCase()
-      .includes(quoteFilter.toLowerCase());
-
-    const matchesFavorite = onlyFavoriteFilter ? quote.isFavorite : true;
-
-    return matchesAuthor && matchesQuote && matchesFavorite;
-  });
-
-  const highLightMatch = (text, filter) => {
-    if (!filter) return text;
-    const regex = new RegExp(`(${filter})`, 'gi');
-    return text.split(regex).map((substring, i) => {
-      if (substring.toLowerCase() === filter.toLowerCase()) {
-        return (
-          <span className={styles['highLight']} key={i}>
-            {substring}
-          </span>
-        );
-      }
-      return substring;
-    });
-  };
+  const filtredQuotes = quotes; // пока без фильтров
 
   return (
     <div className={`${['app-block']} ${styles['block-quotes-list']}`}>
@@ -77,7 +36,7 @@ function QuoteList() {
             <button
               className={styles['quote-actions__buttons']}
               type="button"
-              onClick={() => handleClearAllQuotes()}
+              onClick={handleClearAllQuotes}
               style={{ fontSize: '30px', borderRadius: '10px' }}
             >
               <MdOutlineDeleteSweep />
@@ -91,17 +50,13 @@ function QuoteList() {
             <li key={quote.id}>
               <div
                 className={styles['quote-info']}
-                onClick={() => {
-                  setSelectedQuote(quote);
-                }}
+                onClick={() => setSelectedQuote(quote)}
               >
                 <div className={styles['quote-content']}>
-                  {++i}. "{highLightMatch(quote.quote, quoteFilter)}"
+                  {++i}. "{quote.quote}"
                 </div>
                 <div className={styles['author-source']}>
-                  by{' '}
-                  <strong>{highLightMatch(quote.author, authorFilter)}</strong>{' '}
-                  ({quote.source})
+                  by <strong>{quote.author}</strong> ({quote.source})
                 </div>
               </div>
 

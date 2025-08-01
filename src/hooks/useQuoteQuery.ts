@@ -21,6 +21,7 @@ export const useQuoteQuery = (url: string) => {
 
       return newData;
     },
+    enabled: false,
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false,
   });
