@@ -6,7 +6,7 @@ import { useQuoteQuery } from '../../hooks/useQuoteQuery.ts';
 import styles from './QuoteForm.module.scss';
 
 import { quotesState } from '../../recoil/quotesAtom.ts';
-import { errorState } from '../../recoil/errorAtom';
+import { errorState } from '../../recoil/errorAtom.ts';
 
 function QuoteForm() {
   const [author, setAuthor] = useState('');

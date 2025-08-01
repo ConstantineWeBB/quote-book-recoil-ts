@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useRecoilState } from 'recoil';
 import { ToastContainer, toast } from 'react-toastify';
-import { selectError, clearError } from '../../redux/slices/errorSlice';
+import { errorState } from '../../recoil/errorAtom.ts'; // или .js
 
 export const Error = () => {
-    const dispatch = useDispatch()
-    const errorMessage = useSelector(selectError)
-    useEffect(() => {
-      if (errorMessage) {
-        toast.info(errorMessage);
-        dispatch(clearError());
-      }
-    }, [errorMessage, dispatch]);
+  const [errorMessage, setError] = useRecoilState(errorState);
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.info(errorMessage);
+      setError(null); // очищаем ошибку
+    }
+  }, [errorMessage, setError]);
 
   return <ToastContainer position="bottom-right" autoClose={3000} />;
 };
