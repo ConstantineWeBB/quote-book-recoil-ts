@@ -1,35 +1,35 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useRecoilState } from 'recoil';
 import {
-  setAuthorFilter,
-  setQuoteFilter,
-  setOnlyFavoriteToggle,
-  selectAuthorFilter,
-  selectQuoteFilter,
-  selectOnlyFavoriteToggle,
-  resetFilter,
-} from '../../redux/slices/filterSlice';
+  authorFilterState,
+  quoteFilterState,
+  onlyFavoriteFilterState,
+} from '../../recoil/filterAtoms.ts';
+
 import styles from './QuotesFilter.module.scss';
 
 export const QuotesFilter = () => {
-  const dispatch = useDispatch();
-  const authorFilter = useSelector(selectAuthorFilter);
-  const quoteFilter = useSelector(selectQuoteFilter);
-  const onlyFavoriteFilter = useSelector(selectOnlyFavoriteToggle);
+  const [authorFilter, setAuthorFilter] = useRecoilState(authorFilterState);
+  const [quoteFilter, setQuoteFilter] = useRecoilState(quoteFilterState);
+  const [onlyFavorite, setOnlyFavorite] = useRecoilState(
+    onlyFavoriteFilterState
+  );
 
   const handleAuthorFilter = (e) => {
-    dispatch(setAuthorFilter(e.target.value));
+    setAuthorFilter(e.target.value);
   };
 
   const handleQuoteFilter = (e) => {
-    dispatch(setQuoteFilter(e.target.value));
+    setQuoteFilter(e.target.value);
   };
 
   const handleFavoriteToggle = () => {
-    dispatch(setOnlyFavoriteToggle());
+    setOnlyFavorite((prev) => !prev);
   };
 
   const handleResetFilter = () => {
-    dispatch(resetFilter());
+    setAuthorFilter('');
+    setQuoteFilter('');
+    setOnlyFavorite(false);
   };
 
   return (
@@ -40,7 +40,7 @@ export const QuotesFilter = () => {
           placeholder="Filter by author..."
           onChange={handleAuthorFilter}
           value={authorFilter}
-        ></input>
+        />
       </div>
       <div className={styles['filter-group']}>
         <input
@@ -48,15 +48,15 @@ export const QuotesFilter = () => {
           placeholder="Filter by quote..."
           onChange={handleQuoteFilter}
           value={quoteFilter}
-        ></input>
+        />
       </div>
       <div className={styles['filter-group']}>
         <label>
           <input
             type="checkbox"
             onChange={handleFavoriteToggle}
-            checked={onlyFavoriteFilter}
-          ></input>
+            checked={onlyFavorite}
+          />
           Only Favorite
         </label>
       </div>
