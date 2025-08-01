@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { FaSpinner } from 'react-icons/fa';
-import { addQuote } from '../../redux/slices/quotesSlice';
-import { setError } from '../../redux/slices/errorSlice';
 import createQuoteWithID from '../../utils/createQuoteWithID';
-import { useQuoteQuery } from '../../hooks/useQuoteQuery.ts'; // ⬅️ кастомный хук
+import { useQuoteQuery } from '../../hooks/useQuoteQuery.ts';
 import styles from './QuoteForm.module.scss';
+
+import { quotesState } from '../../recoil/quotesAtom.ts';
+import { errorState } from '../../recoil/errorAtom';
 
 function QuoteForm() {
   const [author, setAuthor] = useState('');
   const [quote, setQuote] = useState('');
-  const dispatch = useDispatch();
+  const [, setQuotes] = useRecoilState(quotesState);
+  const setError = useSetRecoilState(errorState);
 
   const {
     data: randomQuote,
@@ -19,33 +21,34 @@ function QuoteForm() {
     refetch,
   } = useQuoteQuery('https://dummyjson.com/quotes/random');
 
-  // Когда получена цитата — добавляем в Redux quotes
+  // добавляем рандомную цитату в quotesState
   useEffect(() => {
     if (randomQuote) {
-      dispatch(addQuote(randomQuote));
+      setQuotes((prevQuotes) => [...prevQuotes, randomQuote]);
     }
-  }, [randomQuote, dispatch]);
+  }, [randomQuote, setQuotes]);
 
-  // Обработка ошибок
+  // если ошибка — передаём в глобальный errorState
   useEffect(() => {
     if (error) {
-      dispatch(setError(error.message));
+      setError(error.message);
     }
-  }, [error, dispatch]);
+  }, [error, setError]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (quote) {
-      dispatch(addQuote(createQuoteWithID({ author, quote }, 'manual')));
+    if (quote.trim()) {
+      const newQuote = createQuoteWithID({ quote, author }, 'manual');
+      setQuotes((prevQuotes) => [...prevQuotes, newQuote]);
       setAuthor('');
       setQuote('');
     } else {
-      dispatch(setError("You didn't include a quote."));
+      setError("You didn't include a quote.");
     }
   };
 
   const handleAddRandomQuote = () => {
-    refetch(); // ⬅️ запускаем Tanstack-запрос вручную
+    refetch(); // Tanstack fetch
   };
 
   return (
@@ -59,15 +62,14 @@ function QuoteForm() {
           placeholder="Enter the author's name"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-        ></input>
+        />
         <label htmlFor="quote">Quote:</label>
         <textarea
-          type="text"
           id="quote"
           placeholder="Enter a quote"
           value={quote}
           onChange={(e) => setQuote(e.target.value)}
-        ></textarea>
+        />
         <div>
           <button className="buttons" type="submit">
             Add
