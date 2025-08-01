@@ -1,14 +1,23 @@
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { MdOutlineDeleteSweep } from 'react-icons/md';
 
 import { quotesState } from '../../recoil/quotesAtom.ts';
+import {
+  authorFilterState,
+  quoteFilterState,
+  onlyFavoriteFilterState,
+} from '../../recoil/filterAtoms.ts';
+
 import QuoteModal from '../QuoteModal/QuoteModal';
 import styles from './QuotesList.module.scss';
 
 function QuoteList() {
   const [quotes, setQuotes] = useRecoilState(quotesState);
+  const authorFilter = useRecoilValue(authorFilterState);
+  const quoteFilter = useRecoilValue(quoteFilterState);
+  const onlyFavoriteFilter = useRecoilValue(onlyFavoriteFilterState);
   const [selectedQuote, setSelectedQuote] = useState(null);
 
   const handleDeleteQuote = (id) => {
@@ -25,7 +34,34 @@ function QuoteList() {
     setQuotes([]);
   };
 
-  const filtredQuotes = quotes; // пока без фильтров
+  const filtredQuotes = quotes.filter((quote) => {
+    const matchesAuthor = quote.author
+      .toLowerCase()
+      .includes(authorFilter.toLowerCase());
+
+    const matchesQuote = quote.quote
+      .toLowerCase()
+      .includes(quoteFilter.toLowerCase());
+
+    const matchesFavorite = onlyFavoriteFilter ? quote.isFavorite : true;
+
+    return matchesAuthor && matchesQuote && matchesFavorite;
+  });
+
+  const highLightMatch = (text, filter) => {
+    if (!filter) return text;
+    const regex = new RegExp(`(${filter})`, 'gi');
+    return text.split(regex).map((substring, i) => {
+      if (substring.toLowerCase() === filter.toLowerCase()) {
+        return (
+          <span className={styles['highLight']} key={i}>
+            {substring}
+          </span>
+        );
+      }
+      return substring;
+    });
+  };
 
   return (
     <div className={`${['app-block']} ${styles['block-quotes-list']}`}>
@@ -53,10 +89,12 @@ function QuoteList() {
                 onClick={() => setSelectedQuote(quote)}
               >
                 <div className={styles['quote-content']}>
-                  {++i}. "{quote.quote}"
+                  {++i}. "{highLightMatch(quote.quote, quoteFilter)}"
                 </div>
                 <div className={styles['author-source']}>
-                  by <strong>{quote.author}</strong> ({quote.source})
+                  by{' '}
+                  <strong>{highLightMatch(quote.author, authorFilter)}</strong>{' '}
+                  ({quote.source})
                 </div>
               </div>
 
