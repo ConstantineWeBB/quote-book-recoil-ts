@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { FaSpinner } from 'react-icons/fa';
 import createQuoteWithID from '../../utils/createQuoteWithID';
-import { useQuoteQuery } from '../../hooks/useQuoteQuery.ts';
+import { useQuoteQuery } from '../../hooks/useQuoteQuery';
 import styles from './QuoteForm.module.scss';
 
-import { quotesState } from '../../recoil/quotesAtom.ts';
-import { errorState } from '../../recoil/errorAtom.ts';
+import { quotesState } from '../../recoil/quotesAtom';
+import { errorState } from '../../recoil/errorAtom';
 
 function QuoteForm() {
   const [author, setAuthor] = useState('');

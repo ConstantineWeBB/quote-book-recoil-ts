@@ -3,7 +3,7 @@ import {
   authorFilterState,
   quoteFilterState,
   onlyFavoriteFilterState,
-} from '../../recoil/filterAtoms.ts';
+} from '../../recoil/filterAtoms';
 
 import styles from './QuotesFilter.module.scss';
 

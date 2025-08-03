@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { ToastContainer, toast } from 'react-toastify';
-import { errorState } from '../../recoil/errorAtom.ts'; // или .js
+import { errorState } from '../../recoil/errorAtom';
 
 export const Error = () => {
   const [errorMessage, setError] = useRecoilState(errorState);

@@ -46,7 +46,10 @@
     ]
   },
   "devDependencies": {
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
     "gh-pages": "^6.3.0",
-    "sass": "^1.86.3"
+    "sass": "^1.86.3",
+    "typescript": "^5.9.2"
   }
 }

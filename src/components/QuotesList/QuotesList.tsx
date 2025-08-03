@@ -3,12 +3,12 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { MdOutlineDeleteSweep } from 'react-icons/md';
 
-import { quotesState } from '../../recoil/quotesAtom.ts';
+import { quotesState } from '../../recoil/quotesAtom';
 import {
   authorFilterState,
   quoteFilterState,
   onlyFavoriteFilterState,
-} from '../../recoil/filterAtoms.ts';
+} from '../../recoil/filterAtoms';
 
 import QuoteModal from '../QuoteModal/QuoteModal';
 import styles from './QuotesList.module.scss';
