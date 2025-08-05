@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/quote-book-recoil-ts/static/css/main.b50dbc3f.css",
+    "main.js": "/quote-book-recoil-ts/static/js/main.388b2192.js",
+    "index.html": "/quote-book-recoil-ts/index.html",
+    "main.b50dbc3f.css.map": "/quote-book-recoil-ts/static/css/main.b50dbc3f.css.map",
+    "main.388b2192.js.map": "/quote-book-recoil-ts/static/js/main.388b2192.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b50dbc3f.css",
+    "static/js/main.388b2192.js"
+  ]
+}
