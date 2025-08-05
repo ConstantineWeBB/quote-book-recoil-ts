@@ -8,7 +8,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error(
+    "Root container not found. Make sure there is a DOM element with id 'root'."
+  );
+}
+
+const root = ReactDOM.createRoot(container);
 root.render(
   <RecoilRoot>
       <QueryClientProvider client={queryClient}>
