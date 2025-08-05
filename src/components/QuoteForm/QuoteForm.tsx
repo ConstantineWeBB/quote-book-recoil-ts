@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { FaSpinner } from 'react-icons/fa';
 import createQuoteWithID from '../../utils/createQuoteWithID';
@@ -7,11 +7,12 @@ import styles from './QuoteForm.module.scss';
 
 import { quotesState } from '../../recoil/quotesAtom';
 import { errorState } from '../../recoil/errorAtom';
+import { QuoteInput, Quote } from '../../types/Quote';
 
 function QuoteForm() {
   const [author, setAuthor] = useState('');
   const [quote, setQuote] = useState('');
-  const [, setQuotes] = useRecoilState(quotesState);
+  const [quotes, setQuotes] = useRecoilState(quotesState);
   const setError = useSetRecoilState(errorState);
 
   const {
@@ -21,25 +22,25 @@ function QuoteForm() {
     refetch,
   } = useQuoteQuery('https://dummyjson.com/quotes/random');
 
-  // добавляем рандомную цитату в quotesState
+  // добавляем случайную цитату
   useEffect(() => {
     if (randomQuote) {
-      setQuotes((prevQuotes) => [...prevQuotes, randomQuote]);
+      setQuotes((prevQuotes: Quote[]) => [...prevQuotes, randomQuote]);
     }
   }, [randomQuote, setQuotes]);
 
-  // если ошибка — передаём в глобальный errorState
+  // сохраняем ошибку
   useEffect(() => {
     if (error) {
       setError(error.message);
     }
   }, [error, setError]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (quote.trim()) {
       const newQuote = createQuoteWithID({ quote, author }, 'manual');
-      setQuotes((prevQuotes) => [...prevQuotes, newQuote]);
+      setQuotes((prevQuotes: Quote[]) => [...prevQuotes, newQuote]);
       setAuthor('');
       setQuote('');
     } else {
@@ -48,7 +49,7 @@ function QuoteForm() {
   };
 
   const handleAddRandomQuote = () => {
-    refetch(); // Tanstack fetch
+    refetch();
   };
 
   return (

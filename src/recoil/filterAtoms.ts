@@ -10,7 +10,8 @@ export const quoteFilterState = atom<string>({
   default: '',
 });
 
-export const onlyFavoriteFilterState = atom<boolean>({
-  key: 'onlyFavoriteFilterState',
+export const onlyFavoriteState = atom<boolean>({
+  key: 'onlyFavoriteState',
   default: false,
 });
+

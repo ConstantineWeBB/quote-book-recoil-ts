@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useState } from 'react';
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { MdOutlineDeleteSweep } from 'react-icons/md';
 
@@ -7,24 +7,24 @@ import { quotesState } from '../../recoil/quotesAtom';
 import {
   authorFilterState,
   quoteFilterState,
-  onlyFavoriteFilterState,
+  onlyFavoriteState,
 } from '../../recoil/filterAtoms';
-
 import QuoteModal from '../QuoteModal/QuoteModal';
 import styles from './QuotesList.module.scss';
+import { Quote } from '../../types/Quote';
 
-function QuoteList() {
+function QuotesList() {
   const [quotes, setQuotes] = useRecoilState(quotesState);
   const authorFilter = useRecoilValue(authorFilterState);
   const quoteFilter = useRecoilValue(quoteFilterState);
-  const onlyFavoriteFilter = useRecoilValue(onlyFavoriteFilterState);
-  const [selectedQuote, setSelectedQuote] = useState(null);
+  const onlyFavoriteFilter = useRecoilValue(onlyFavoriteState);
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
 
-  const handleDeleteQuote = (id) => {
+  const handleDeleteQuote = (id: string) => {
     setQuotes((prev) => prev.filter((q) => q.id !== id));
   };
 
-  const handleToggleQuote = (id) => {
+  const handleToggleQuote = (id: string) => {
     setQuotes((prev) =>
       prev.map((q) => (q.id === id ? { ...q, isFavorite: !q.isFavorite } : q))
     );
@@ -34,40 +34,37 @@ function QuoteList() {
     setQuotes([]);
   };
 
-  const filtredQuotes = quotes.filter((quote) => {
+  const highLightMatch = (text: string, filter: string) => {
+    if (!filter) return text;
+    const regex = new RegExp(`(${filter})`, 'gi');
+    return text.split(regex).map((substring, i) =>
+      substring.toLowerCase() === filter.toLowerCase() ? (
+        <span className={styles['highLight']} key={i}>
+          {substring}
+        </span>
+      ) : (
+        substring
+      )
+    );
+  };
+
+  const filteredQuotes = quotes.filter((quote) => {
     const matchesAuthor = quote.author
       .toLowerCase()
       .includes(authorFilter.toLowerCase());
-
     const matchesQuote = quote.quote
       .toLowerCase()
       .includes(quoteFilter.toLowerCase());
-
     const matchesFavorite = onlyFavoriteFilter ? quote.isFavorite : true;
 
     return matchesAuthor && matchesQuote && matchesFavorite;
   });
 
-  const highLightMatch = (text, filter) => {
-    if (!filter) return text;
-    const regex = new RegExp(`(${filter})`, 'gi');
-    return text.split(regex).map((substring, i) => {
-      if (substring.toLowerCase() === filter.toLowerCase()) {
-        return (
-          <span className={styles['highLight']} key={i}>
-            {substring}
-          </span>
-        );
-      }
-      return substring;
-    });
-  };
-
   return (
     <div className={`${['app-block']} ${styles['block-quotes-list']}`}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h2 style={{ margin: '0 auto' }}>QuoteList</h2>
-        {quotes.length !== 0 && (
+        {quotes.length > 0 && (
           <div className={styles['quote-actions']}>
             <button
               className={styles['quote-actions__buttons']}
@@ -81,15 +78,15 @@ function QuoteList() {
         )}
       </div>
       <ul>
-        {quotes.length !== 0 ? (
-          filtredQuotes.map((quote, i) => (
+        {filteredQuotes.length > 0 ? (
+          filteredQuotes.map((quote, i) => (
             <li key={quote.id}>
               <div
                 className={styles['quote-info']}
                 onClick={() => setSelectedQuote(quote)}
               >
                 <div className={styles['quote-content']}>
-                  {++i}. "{highLightMatch(quote.quote, quoteFilter)}"
+                  {i + 1}. "{highLightMatch(quote.quote, quoteFilter)}"
                 </div>
                 <div className={styles['author-source']}>
                   by{' '}
@@ -128,4 +125,4 @@ function QuoteList() {
   );
 }
 
-export default QuoteList;
+export default QuotesList;

@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil';
 import {
   authorFilterState,
   quoteFilterState,
-  onlyFavoriteFilterState,
+  onlyFavoriteState,
 } from '../../recoil/filterAtoms';
 
 import styles from './QuotesFilter.module.scss';
@@ -10,15 +10,13 @@ import styles from './QuotesFilter.module.scss';
 export const QuotesFilter = () => {
   const [authorFilter, setAuthorFilter] = useRecoilState(authorFilterState);
   const [quoteFilter, setQuoteFilter] = useRecoilState(quoteFilterState);
-  const [onlyFavorite, setOnlyFavorite] = useRecoilState(
-    onlyFavoriteFilterState
-  );
+  const [onlyFavorite, setOnlyFavorite] = useRecoilState(onlyFavoriteState);
 
-  const handleAuthorFilter = (e) => {
+  const handleAuthorFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthorFilter(e.target.value);
   };
 
-  const handleQuoteFilter = (e) => {
+  const handleQuoteFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuoteFilter(e.target.value);
   };
 

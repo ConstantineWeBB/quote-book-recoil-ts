@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
+import { Quote } from '../types/Quote';
 
-export const quotesState = atom({
+export const quotesState = atom<Quote[]>({
   key: 'quotesState',
   default: [],
   effects_UNSTABLE: [
