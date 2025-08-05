@@ -7,12 +7,12 @@ import styles from './QuoteForm.module.scss';
 
 import { quotesState } from '../../recoil/quotesAtom';
 import { errorState } from '../../recoil/errorAtom';
-import { QuoteInput, Quote } from '../../types/Quote';
+import { Quote } from '../../types/Quote';
 
 function QuoteForm() {
   const [author, setAuthor] = useState('');
   const [quote, setQuote] = useState('');
-  const [quotes, setQuotes] = useRecoilState(quotesState);
+  const [, setQuotes] = useRecoilState(quotesState);
   const setError = useSetRecoilState(errorState);
 
   const {

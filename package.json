@@ -18,7 +18,7 @@
     "uuid": "^11.1.0",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://ConstantineWeBB.github.io/quote-book",
+  "homepage": "https://ConstantineWeBB.github.io/quote-book-recoil-ts",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
